@@ -7,7 +7,7 @@ Static frontend for the deployed Swarmlers contracts (collection, activity regis
 The app has no built-in addresses, chain id, ABIs or RPC URLs. At start it fetches `./imd-deployment.json` (next to `index.html`) and the ABI files it references under `abi/`. That manifest is generated from the workflow deployment handoff and carries:
 
 - `chainId`, `launchId`, `sourceCommit`, `attestationHash`
-- `contracts[]` with `name`, `address`, `abiHash`, `abiPath`
+- `contracts[]` with `name`, `address`, `abiHash`, `abiPath` and the deployment `blockNumber` (the event feed never scans before it)
 - `poolKey` of the launch's Uniswap v4 pool (copied exactly from the handoff)
 - `network` (public RPC URLs, explorer, native currency, Uniswap v4 addresses: PoolManager, Universal Router, Quoter, StateView, PositionManager, Permit2, and the IMD pair token) copied unchanged from `.imd/reads/network.json`
 - `walletAddChain`, the exact `wallet_addEthereumChain` parameters
@@ -37,7 +37,12 @@ ABIs under `public/abi/` are copies of `docs/abi/` at the pinned source commit. 
 
 ## What the page does
 
-- Header: name at the left, wallet button at the right (connect, copy address, disconnect).
+- Theme: dark by default (the art's own ground), a light option behind the sun/moon button in the header; the choice is stored in `localStorage` (`swarmlers-theme`) and applied before first paint by an inline script in `index.html` (`src/theme.ts`, `src/ThemeToggle.tsx`).
+- Hero: headline, one line, and an animated spider web (`src/WebCanvas.tsx`) whose crawlers are the next six Swarmlers in line, coloured by the contract's hue rule; it leans toward the pointer, pauses off screen and draws a still frame under reduced motion. The mint card sits in the hero so the main action is on the first screen.
+- Vitals (`src/Stats.tsx`): minted, reward reserve, paid to holders, reward clock, and a supply meter; counters count up on first appearance.
+- Inspect any Swarmler (`src/Inspector.tsx`, `src/art.ts`): type an ID from 1 to 2,500 and see it drawn locally with the same rules as `SwarmlerArt.sol` (rarity, hue, body width, 12 markings); minted IDs add live holder, pairing, earned and claimable reads and use the on-chain `tokenURI` image. "Next in line" chips and "Rarity by tier" meters (minted of total per tier, next ID of each tier) are computed locally from `totalMinted`. Gallery tiles, queue chips and feed rows open the inspector at that ID.
+- On the web (`src/Feed.tsx`): the latest collection and registry events (mints, free claims, pairings, reward claims, deposits, checkpoints, configuration) read with `eth_getLogs` in 10,000-block chunks back to the deployment block carried in the manifest, refreshed every 20 s.
+- Header: name and section navigation at the left (from 900 px), theme toggle and wallet button at the right (connect, copy address, disconnect).
 - Wrong network: a single "Switch to Ethereum" control; on error 4902 the app sends `wallet_addEthereumChain` with the manifest's parameters, then switches again.
 - Mint: supply, price, your IMD balance and allowance; approve exactly 0.25 IMD, then `mint()`. Disabled while public minting is closed or the wallet is not ready.
 - Claim: Identity MD id input; live `eligible()` and `status()` preflight; `freeClaim(id)`.
@@ -50,4 +55,4 @@ ABIs under `public/abi/` are copies of `docs/abi/` at the pinned source commit. 
 
 Every transaction is simulated against the chain first, then signed by the visitor's wallet, then awaited; the status, hash link and a plain-language error (custom errors are translated in `src/errors.ts`) appear next to the button that started it.
 
-See `../docs/FRONTEND_VALIDATION.md` for the validation record and `DESIGN.md` for the design documentation.
+See `../docs/FRONTEND_VALIDATION.md` for the validation record and `../DESIGN.md` for the design documentation.

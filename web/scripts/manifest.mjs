@@ -42,7 +42,7 @@ if (existsSync(handoffPath)) {
     chainId: h.chainId,
     sourceCommit: h.sourceCommit,
     attestationHash: h.attestationHash,
-    contracts: h.contracts.map((c) => ({ name: c.name, address: c.address, abiHash: c.abiHash })),
+    contracts: h.contracts.map((c) => ({ name: c.name, address: c.address, abiHash: c.abiHash, blockNumber: c.blockNumber })),
     poolKey: h.poolKey
       ? { currency0: h.poolKey.currency0, currency1: h.poolKey.currency1, fee: h.poolKey.fee, tickSpacing: h.poolKey.tickSpacing, hooks: h.poolKey.hooks }
       : undefined,
@@ -60,7 +60,7 @@ if (existsSync(handoffPath)) {
     chainId: m.chainId,
     sourceCommit: m.sourceCommit,
     attestationHash: m.attestationHash,
-    contracts: m.contracts.map((c) => ({ name: c.name, address: c.address, abiHash: c.abiHash })),
+    contracts: m.contracts.map((c) => ({ name: c.name, address: c.address, abiHash: c.abiHash, blockNumber: c.blockNumber })),
     poolKey: m.poolKey,
   };
   network = m.network ?? null;
@@ -89,7 +89,9 @@ const contracts = identity.contracts.map((c) => {
     console.error(`ABI hash mismatch for ${c.name}: export ${hash}, handoff ${c.abiHash}`);
     process.exit(1);
   }
-  return { name: c.name, address: c.address, abiHash: c.abiHash, abiPath };
+  const entry = { name: c.name, address: c.address, abiHash: c.abiHash, abiPath };
+  if (Number.isInteger(c.blockNumber)) entry.blockNumber = c.blockNumber;
+  return entry;
 });
 
 // Enumerate every exported file except the manifest itself.

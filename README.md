@@ -4,6 +4,20 @@ This is the contract-stage deliverable for Swarmlers on Ethereum (chain ID 1): t
 
 **Launch-policy conflict requiring a requester decision:** the launch's pool has the protocol's initialization-only guard as its hook and fixed fee beneficiaries (1% of volume to the wallet that paid for the launch, 0.25% to IMD). A v4 hook is part of the immutable pool key, so **no contract in this tree can receive the launch pool's trading fees, and under this policy the launch pool funds 0% of NFT rewards**. The brief's "90% of trading fees" is reachable only by two voluntary routes: the payer deposits what they claim from the launch pool through `depositProceeds` (split 90/10 like every deposit), or liquidity is supplied to the **separate pool** served by `SwarmlerFeeHook`, which routes that pool's realized LP fees 90/10. No launch supply is reserved for that pool. The requester must decide, before the site advertises trading-fee rewards, whether mint-proceeds rewards plus these voluntary routes are acceptable; the contracts cannot settle it and the manifest cannot either. See [review findings](docs/REVIEW.md). Source publication, the manifest, independent review, attestation, admission, deployment, and the IPFS frontend are later service responsibilities.
 
+## Website
+
+The site under `web/` (Vite, React 18, TypeScript, wagmi 2, viem 2) is a one-page static app for the deployed contracts: inspect any of the 2,500 Swarmlers drawn locally from the contract's art rules, mint or claim one, pair it, claim rewards, watch the live on-chain activity feed, fund the reward pool and trade SWARMLER. It is dark by default with a light option in the header. The committed export at `dist/` (relative asset URLs, no server routing) is what gets pinned; the publisher does not rebuild.
+
+```sh
+cd web
+npm install          # install dependencies (network access)
+npm run dev          # local dev server (serves ../dist/imd-deployment.json as the runtime config)
+npm run preview      # serve the committed export under ../dist
+npm run export       # typecheck + production build to ../dist, then regenerate dist/imd-deployment.json
+```
+
+Rebuild order after a source change: `npm run export` (that is `npm run build` then `npm run manifest`), then commit `dist/` with the source. `npm run typecheck` and `npm test` run the TypeScript check and the unit tests (swap encoding, manifest validation, chain switching, formatting, the art port). Design documentation is in [DESIGN.md](DESIGN.md); the worker-side validation record, including the design probe and the browser interaction run, is in [docs/FRONTEND_VALIDATION.md](docs/FRONTEND_VALIDATION.md). Details of the app's runtime configuration are in [web/README.md](web/README.md).
+
 ## Build and check
 
 ```sh

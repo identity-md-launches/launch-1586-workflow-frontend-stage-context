@@ -15,6 +15,8 @@ export interface DeploymentContract {
   address: Address;
   abiHash: string;
   abiPath: string;
+  /** Deployment block from the handoff; the event feed never scans before it. */
+  blockNumber?: number;
 }
 
 export interface NetworkBlock {
@@ -145,11 +147,13 @@ export function validateManifest(raw: unknown): DeploymentManifest {
     if (typeof entry.abiHash !== 'string' || !/^[0-9a-f]{64}$/.test(entry.abiHash)) {
       throw new Error(`Deployment manifest: ${entry.name} abiHash invalid`);
     }
+    const blockNumber = typeof entry.blockNumber === 'number' && Number.isInteger(entry.blockNumber) && entry.blockNumber >= 0 ? entry.blockNumber : undefined;
     return {
       name: entry.name,
       address: assertAddress(entry.address, `${entry.name} address`),
       abiHash: entry.abiHash,
       abiPath: assertRelativePath(entry.abiPath, `${entry.name} abiPath`),
+      ...(blockNumber !== undefined ? { blockNumber } : {}),
     };
   });
   for (const name of CONTRACT_NAMES) {

@@ -9,25 +9,29 @@
       "name": "LaunchToken",
       "address": "0x260b97dd95e22e738ac2f1aa52700183ca3923ff",
       "abiHash": "38880b8e56d42ce900f744a7908c7139632a49f1c3f33385c64ceaed29d37bee",
-      "abiPath": "abi/LaunchToken.json"
+      "abiPath": "abi/LaunchToken.json",
+      "blockNumber": 26184105
     },
     {
       "name": "SwarmlerActivity",
       "address": "0x29c9a94e717f1d0670f4cd6116d74c36bdb53fc5",
       "abiHash": "3346b0e41eb4f8c7e89d2639bab9f65ea305d1591e52a99802e91763d8742787",
-      "abiPath": "abi/SwarmlerActivity.json"
+      "abiPath": "abi/SwarmlerActivity.json",
+      "blockNumber": 26184105
     },
     {
       "name": "Swarmlers",
       "address": "0xf376b5deff43d949f515b1fd11865b73e92d5bad",
       "abiHash": "836fd657a90ecfcc12ec4c0d25f455ee67d6ae54f662f3b5516d034ddd3c2080",
-      "abiPath": "abi/Swarmlers.json"
+      "abiPath": "abi/Swarmlers.json",
+      "blockNumber": 26184105
     },
     {
       "name": "SwarmlerHookDeployer",
       "address": "0xb3a7680d9db1ea94a2cc5315fb588be937afe7b0",
       "abiHash": "c4c252431b7536cf4924dbc089a9c9f329360669785ae5e92da29530f914516e",
-      "abiPath": "abi/SwarmlerHookDeployer.json"
+      "abiPath": "abi/SwarmlerHookDeployer.json",
+      "blockNumber": 26184105
     }
   ],
   "assets": [
@@ -52,28 +56,28 @@
       "sha256": "bf39a0a9aff67431d5269a2ec14248553430a85d8f89a1e1330c8427d3c3a484"
     },
     {
-      "path": "assets/ccip-C5YorB6I.js",
-      "sha256": "96a8b4ead2911c1c6c0cf83bf0132481a7f0039a6095b88539cd2201b39694f9"
+      "path": "assets/ccip-CL4iis0_.js",
+      "sha256": "54843c7307cefc6cf87cf04eacb036488edf0aab789486f1c5ce6afc2dcd7927"
     },
     {
-      "path": "assets/index-BZcOS7_N.js",
-      "sha256": "80fb58ac9ae935c28fff6a42fef41cb10c08177dbe74bb75553dde20773bc4e0"
+      "path": "assets/index-CNPs4T_a.css",
+      "sha256": "0a630843a72532f3da5b6fb07a99182701148463f86f9486219275d06cef9636"
     },
     {
-      "path": "assets/index-Bf_5SNKg.css",
-      "sha256": "7d16310a7a224242a6a94938289eee43e49d305c62323ef6c3e93733a861928f"
+      "path": "assets/index-CRcr0MGx.js",
+      "sha256": "cb812ef1aef32d9931970d8dfee3b35bb2c4d76f6701739155e67efefe0822e2"
     },
     {
       "path": "favicon.svg",
-      "sha256": "e23719c897679cab5dfb258247c5289498ed9d3b7f0eca4d2ea1d751f2bb145b"
+      "sha256": "3ddb7b7f6840b85b6b5dbbf172009fe23886ff165180230a33e08b471d01a564"
     },
     {
       "path": "index.html",
-      "sha256": "297ad511fd030b32dc9ca9a194ce9f47a89f08c85a123d4efb849098b5d2346e"
+      "sha256": "ab1336de36ff0a2b877c30c9d6eba7b203b8c9b8b955ef4539278c7be7e120ff"
     },
     {
       "path": "og.png",
-      "sha256": "359553b64a47e51949ee56ade867829bcae929801653b0da355005cfcd62dbe3"
+      "sha256": "fa6998caae4af569fcc553cd3f71da5a91b8368656d9566df799f4a85940be6d"
     }
   ],
   "poolKey": {

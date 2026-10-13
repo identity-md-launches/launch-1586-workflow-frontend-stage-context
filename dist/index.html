@@ -1,19 +1,32 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Swarmlers: mint, claim and earn IMD</title>
-    <meta name="description" content="Mint one of 2,500 Swarmler spider-crawler agent NFTs with IMD, claim one free as an active Identity MD holder, pair it and collect holding-time rewards." />
-    <meta property="og:title" content="Swarmlers: mint, claim and earn IMD" />
-    <meta property="og:description" content="2,500 on-chain Swarmler NFTs on Ethereum. Mint for 0.25 IMD, free claim for active Identity MD holders, rewards for holders." />
+    <title>Swarmlers: spider-crawler agent NFTs that earn IMD</title>
+    <meta name="description" content="2,500 Swarmler spider-crawler agent NFTs drawn on chain on Ethereum. Inspect any ID before you mint, mint for 0.25 IMD or claim one free as an active Identity MD holder, pair it and earn holding-time rewards." />
+    <meta property="og:title" content="Swarmlers: spider-crawler agent NFTs that earn IMD" />
+    <meta property="og:description" content="2,500 on-chain Swarmlers on Ethereum. Mint for 0.25 IMD, free claim for active Identity MD holders, up to 1 IMD in rewards per Swarmler." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="./og.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="color-scheme" content="light dark" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#090d19" />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-    <script type="module" crossorigin src="./assets/index-BZcOS7_N.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-Bf_5SNKg.css">
+    <script>
+      // Apply the stored theme before first paint. Dark is the default; "system" follows the OS.
+      (function () {
+        try {
+          var v = localStorage.getItem('swarmlers-theme');
+          var t = v === 'light' || v === 'dark' ? v : v === 'system' && matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          document.documentElement.dataset.theme = t;
+          var m = document.querySelector('meta[name="theme-color"]');
+          if (m) m.setAttribute('content', t === 'dark' ? '#090d19' : '#f4f5fa');
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" crossorigin src="./assets/index-CRcr0MGx.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CNPs4T_a.css">
   </head>
   <body>
     <div id="root"></div>

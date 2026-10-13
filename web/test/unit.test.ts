@@ -167,3 +167,53 @@ describe('error translation', () => {
     expect(describeError(new Error('boom'))).toBe('boom');
   });
 });
+
+import { bodyWidth, hue, imageUrl, isValidId, mintedByRarity, nextOfRarity, rarity, RARITY_SUPPLY, sigilBits, svg } from '../src/art';
+
+describe('on-chain art port', () => {
+  it('reproduces the tier sizes over all 2,500 IDs', () => {
+    const counts = mintedByRarity(2500);
+    expect(counts).toEqual(RARITY_SUPPLY);
+  });
+  it('matches the contract formulas for known IDs', () => {
+    expect(rarity(1)).toBe('Common');
+    expect(hue(1)).toBe(137);
+    expect(bodyWidth(1)).toBe(33);
+    expect(sigilBits(1)[0]).toBe(true);
+    expect(sigilBits(1).slice(1).every((b) => !b)).toBe(true);
+    // Verified byte-for-byte against Swarmlers.tokenURI(1) on chain 1 during validation.
+    const s = svg(1, false);
+    expect(s.startsWith('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect width="400" height="400" fill="#090d19"/><g stroke="hsl(137,80%,65%)" stroke-width="5" fill="none">')).toBe(true);
+    expect(s).toContain('<ellipse cx="200" cy="220" rx="33" ry="55" fill="#151d32"/>');
+    expect(s).toContain('<circle cx="190" cy="160" r="3"/>');
+    expect(s.endsWith('>Common / DORMANT</text></svg>')).toBe(true);
+    expect(svg(1, true)).toContain('r="7"');
+    expect(svg(1, true).endsWith('>Common / ACTIVE</text></svg>')).toBe(true);
+  });
+  it('validates IDs and finds the next tier member', () => {
+    expect(isValidId(0)).toBe(false);
+    expect(isValidId(2500)).toBe(true);
+    expect(isValidId(2501)).toBe(false);
+    const next = nextOfRarity(26, 'Legendary');
+    expect(next).not.toBeNull();
+    expect(rarity(next!)).toBe('Legendary');
+    for (let id = 26; id < next!; id++) expect(rarity(id)).not.toBe('Legendary');
+    expect(nextOfRarity(2501, 'Common')).toBeNull();
+  });
+  it('emits a data URL the browser can draw', () => {
+    expect(imageUrl(7)).toMatch(/^data:image\/svg\+xml;base64,PHN2Zy/);
+  });
+});
+
+import { validateManifest as vm } from '../src/config';
+describe('manifest block numbers', () => {
+  it('keeps an integer blockNumber and drops a bad one', () => {
+    const base = {
+      version: 1, launchId: 'x', chainId: 1, sourceCommit: 'a'.repeat(40), attestationHash: 'b'.repeat(64), assets: [],
+      contracts: ['LaunchToken', 'SwarmlerActivity', 'Swarmlers', 'SwarmlerHookDeployer'].map((name, i) => ({ name, address: '0x' + (i + 1).toString().padStart(40, '0'), abiHash: 'c'.repeat(64), abiPath: `abi/${name}.json`, blockNumber: i === 0 ? 26184105 : 'nope' })),
+    };
+    const m = vm(base);
+    expect(m.contracts[0].blockNumber).toBe(26184105);
+    expect(m.contracts[1].blockNumber).toBeUndefined();
+  });
+});

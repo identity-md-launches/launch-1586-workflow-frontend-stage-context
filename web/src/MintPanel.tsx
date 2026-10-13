@@ -4,6 +4,7 @@ import { formatAmount } from './format';
 import { useReady } from './NetworkBanner';
 import { useCollectionState, useImdBalance } from './reads';
 import { erc20Abi } from './config';
+import { NextUp } from './Inspector';
 import { Card, Fact, Notice, TxStatus } from './ui';
 import { phaseLabel, useTx } from './useTx';
 
@@ -31,9 +32,9 @@ export function MintPanel() {
   const imd = s.imd;
 
   return (
-    <Card id="mint" title="Mint a Swarmler" lead="Pay exactly 0.25 IMD per Swarmler.">
+    <Card id="mint" title="Mint a Swarmler" lead="Pay exactly 0.25 IMD. The next ID in line is yours.">
       <dl className="facts">
-        <Fact label="Minted" value={minted !== undefined && max !== undefined ? `${minted.toString()} of ${max.toString()}` : '…'} big />
+        <Fact label="Next ID" value={minted !== undefined ? `#${(minted + 1n).toString()}` : '…'} big />
         <Fact label="Price" value={price !== undefined ? `${formatAmount(price)} IMD` : '…'} big />
         {isConnected ? <Fact label="Your IMD" value={bal.balance !== undefined ? `${formatAmount(bal.balance)} IMD` : '…'} /> : null}
         {isConnected ? <Fact label="Approved to collection" value={bal.allowance !== undefined ? `${formatAmount(bal.allowance)} IMD` : '…'} /> : null}
@@ -77,6 +78,7 @@ export function MintPanel() {
       ) : null}
       <TxStatus state={approve.state} done="Approval confirmed. You can mint now." />
       <TxStatus state={mint.state} done="Minted. Your new Swarmler appears under Your Swarmlers." />
+      {minted !== undefined && !soldOut ? <NextUp minted={Number(minted)} count={4} /> : null}
     </Card>
   );
 }
